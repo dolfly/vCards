@@ -1,0 +1,57 @@
+name: Pages
+
+# 每次 main 分支的数据或网页构建相关文件变更后，自动构建网页版本
+# 并将构建产物强制推送到 pages 分支，由 GitHub Pages 从 pages 分支发布。
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+    - "data/**"
+    - "src/**"
+    - "package.json"
+    - "package-lock.json"
+    - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+# GITHUB_TOKEN 需要写权限才能推送 pages 分支
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+env:
+  # GitHub Pages 自定义域名，写入部署产物根目录的 CNAME 文件
+  PAGES_DOMAIN: vcards.n.diele.me
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build web
+        run: npm run build:web
+      - name: Deploy to pages branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd public-web
+          printf '%s\n' "$PAGES_DOMAIN" > CNAME
+          touch .nojekyll
+          git init -q
+          git symbolic-ref HEAD refs/heads/pages
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -q -m "Deploy web build $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" pages
