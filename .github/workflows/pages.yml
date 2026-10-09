@@ -23,7 +23,7 @@ concurrency:
 
 env:
   # GitHub Pages 自定义域名，写入部署产物根目录的 CNAME 文件
-  PAGES_DOMAIN: vcards.n.diele.me
+  PAGES_DOMAIN: vcards.p.diele.me
 
 jobs:
   build-and-deploy:
