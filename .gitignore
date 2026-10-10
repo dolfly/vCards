@@ -6,3 +6,8 @@ public
 radicale
 
 public-web
+
+# 网页版生成产物（由 src/generate-web-data.js 生成）
+web/src/data
+web/public/icons
+web/public/vcf

@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - `generator_ext` - 扩展版本，保留所有号码并添加 git 历史时间戳
 - 支持生成分类文件夹和汇总文件
 - 支持生成 Radicale CardDAV 服务所需的文件结构
-- 网页版本构建：`buildWeb` - 生成可浏览的网页界面
+- 网页版本构建：`generate-web-data.js` 生成数据 + Vite 打包 React SPA → 输出 `public-web/`
 
 ### 插件系统
 - `src/plugins/vcard.js` - 标准 vCard 生成插件
@@ -47,9 +47,9 @@ npm run radicale
 # 构建网页版本
 npm run build:web
 
-# 启动网页开发服务器
+# 启动 Vite 开发服务器（热重载，运行 web 下的 React SPA）
 npm run dev:web
-# 或单独启动服务器
+# 或用 Node 静态服务器预览已构建产物（public-web，端口 3000）
 npm run serve:web
 ```
 
@@ -122,23 +122,31 @@ npm run gulp buildWeb
 - `public/archive.zip` - 打包的发布文件
 - `radicale/ios/` - iOS CardDAV 服务文件，按分类分文件夹
 - `radicale/macos/全部/` - macOS CardDAV 服务文件，所有联系人在一个文件夹
-- `public-web/` - 网页版本输出目录，包含 HTML、CSS、JS 和资源文件
+- `public-web/` - 网页版本构建产物（Vite 输出），包含 HTML、JS、CSS 与 icons/vcf 资源
 
 ## 网页版本
 
-### 开发服务器
-- 使用 `src/serve.js` 作为开发服务器
-- 默认运行在 `http://localhost:3000`
-- 支持热重载和静态文件服务
-- 自动设置正确的 MIME 类型，包括 `.vcf` 文件
+网页版是位于 `web/` 的 React 18 + Vite 单页应用（SPA），采用 hash 路由，三个视图：
 
-### 构建流程
-- `buildWeb` 任务会：
-  1. 读取所有 YAML 数据文件
-  2. 生成 JSON 数据注入到网页模板
-  3. 复制图标文件到 `public-web/icons/`
-  4. 复制 VCF 文件到 `public-web/vcf/`
-  5. 生成完整的网页界面
+- **首页 `/`** —— 产品介绍、三种使用方式、分类快捷入口
+- **行业分类 `/category` / `/category/:name`** —— 分类网格 + 分类内联系人列表（可搜索）
+- **详情 `/detail/:category/:filename`** —— 完整电话/官网/邮箱，支持复制号码、`tel:` 拨打、下载 vCard
+
+### 数据与静态资源生成
+- `npm run web:data` 先运行 gulp `generator` 生成 `temp/*.vcf`，再运行 `src/generate-web-data.js`：
+  1. 读取所有 `data/*/*.yaml`，归一化电话/邮箱（含带标签对象），生成 `web/src/data/vcards.json`
+  2. 复制图标 PNG → `web/public/icons/`，复制 VCF → `web/public/vcf/`
+- 这些生成产物已加入 `.gitignore`，不入库
+
+### 构建与部署
+- `npm run build:web` = `web:data` + Vite 构建，产物输出到 `public-web/`（`vite.config.js` 的 `outDir` 指向 `../public-web`，`base: './'` 兼容子路径部署）
+- GitHub Actions `pages.yml` 将 `public-web/` 推送到 `pages` 分支，由 GitHub Pages 发布
+
+### 设计规范
+- 视觉遵循根目录 `DESIGN.md`（Apple 极简白），单一强调色 `#0066cc`，令牌见 `web/src/styles/global.css` 的 `:root` 变量
+
+### 开发服务器
+- `src/serve.js` 作为静态服务器服务 `public-web/`（默认 `http://localhost:3000`），自动设置 MIME 类型并解码中文文件名 URL
 
 ## 关键技术细节
 

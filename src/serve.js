@@ -38,8 +38,15 @@ const server = createServer(async (req, res) => {
     // 移除查询参数
     filePath = filePath.split('?')[0]
     
+    // 解码百分号编码（中文文件名等 UTF-8 路径）
+    try {
+      filePath = decodeURIComponent(filePath)
+    } catch {
+      // 保留原样
+    }
+    
     // 安全检查：防止路径遍历攻击
-    if (filePath.includes('..')) {
+    if (filePath.includes('..') || filePath.includes('\0')) {
       res.writeHead(403, { 'Content-Type': 'text/plain' })
       res.end('Forbidden')
       return
