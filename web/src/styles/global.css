@@ -311,6 +311,13 @@ button {
   margin-bottom: 32px;
 }
 
+.tile__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
 .text-link {
   font-size: 17px;
   color: var(--primary);
@@ -880,5 +887,267 @@ button {
   }
   .page__title {
     font-size: 34px;
+  }
+}
+/* ---------- 请求收录表单 ---------- */
+.btn--on-dark {
+  color: var(--primary-on-dark);
+  border-color: var(--primary-on-dark);
+}
+
+.btn--on-dark:hover {
+  background: rgba(41, 151, 255, 0.12);
+}
+
+.page--submit .page__lead {
+  max-width: 720px;
+}
+
+.submit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.form-card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.form-field {
+  margin-bottom: 22px;
+}
+
+.form-field:last-of-type {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.form-required {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-muted-48);
+  margin-left: 4px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--canvas);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%237a7a7a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.14);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #a1a1a6;
+}
+
+.form-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-muted-48);
+  margin-top: 8px;
+}
+
+.form-error {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d70015;
+  margin-top: 8px;
+}
+
+.form-error--summary {
+  font-size: 14px;
+  background: rgba(215, 0, 21, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+
+.form-callout {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-muted-80);
+  background: var(--canvas-parchment);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 22px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 68px;
+}
+
+.form-card--preview {
+  background: var(--surface-pearl);
+}
+
+.form-preview__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-preview__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form-preview__head .text-link {
+  font-size: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.form-preview__subject {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--divider-soft);
+  word-break: break-word;
+}
+
+.form-preview__body {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-muted-80);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.submit-steps__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.submit-steps__list {
+  list-style: none;
+  counter-reset: submit-step;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.submit-steps__list li {
+  counter-increment: submit-step;
+  position: relative;
+  padding-left: 32px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-muted-80);
+}
+
+.submit-steps__list li::before {
+  content: counter(submit-step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(0, 102, 204, 0.1);
+  border-radius: var(--radius-pill);
+}
+
+.submit-note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-muted-48);
+  margin-top: 14px;
+}
+
+.submit-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 833px) {
+  .submit-layout {
+    grid-template-columns: 1fr;
+  }
+  .submit-aside {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-card {
+    padding: 20px;
+  }
+  .form-actions .btn {
+    width: 100%;
   }
 }

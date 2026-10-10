@@ -126,11 +126,12 @@ npm run gulp buildWeb
 
 ## 网页版本
 
-网页版是位于 `web/` 的 React 18 + Vite 单页应用（SPA），采用 hash 路由，三个视图：
+网页版是位于 `web/` 的 React 18 + Vite 单页应用（SPA），采用 hash 路由，视图：
 
 - **首页 `/`** —— 产品介绍、三种使用方式、分类快捷入口
 - **行业分类 `/category` / `/category/:name`** —— 分类网格 + 分类内联系人列表（可搜索）
 - **详情 `/detail/:category/:filename`** —— 完整电话/官网/邮箱，支持复制号码、`tel:` 拨打、下载 vCard
+- **请求收录 `/submit`** —— 填写表单后生成预填好的 GitHub 新建 Issue 链接（纯前端，无后端），保留 GitHub Issue 模板提交方式；纯逻辑在 `web/src/lib/submit.js`，配套单测在 `src/test.js`
 
 ### 数据与静态资源生成
 - `npm run web:data` 先运行 gulp `generator` 生成 `temp/*.vcf`，再运行 `src/generate-web-data.js`：

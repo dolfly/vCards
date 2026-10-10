@@ -2,7 +2,8 @@ import { NavLink, Link } from 'react-router-dom'
 
 const links = [
   { to: '/', label: '首页' },
-  { to: '/category', label: '行业分类' }
+  { to: '/category', label: '行业分类' },
+  { to: '/submit', label: '请求收录' }
 ]
 
 export default function GlobalNav() {

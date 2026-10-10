@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import CategoryIndex from './pages/CategoryIndex'
 import CategoryPage from './pages/CategoryPage'
 import DetailPage from './pages/DetailPage'
+import SubmitPage from './pages/SubmitPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/category" element={<CategoryIndex />} />
           <Route path="/category/:name" element={<CategoryPage />} />
           <Route path="/detail/:category/:filename" element={<DetailPage />} />
+          <Route path="/submit" element={<SubmitPage />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>
