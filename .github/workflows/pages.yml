@@ -8,6 +8,7 @@ on:
     paths:
     - "data/**"
     - "src/**"
+    - "web/**"
     - "package.json"
     - "package-lock.json"
     - ".github/workflows/pages.yml"

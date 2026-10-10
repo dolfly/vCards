@@ -67,9 +67,20 @@
 
 ## 请求收录
 
-1. 打开 [新增 vCard 请求](https://github.com/metowolf/vCards/issues/new/choose) 页面，选择「vCard 新增请求」
+### 方式一：网页提交（推荐）
+
+1. 打开网页版「请求收录」页面：<https://vcards.p.diele.me/#/submit>
+2. 填写类别、组织名称、电话、官网、邮箱等信息
+3. 点击「在 GitHub 提交 Issue」，在打开的页面中确认内容并拖拽上传图标（如需）
+4. 提交 Issue，等待处理
+
+### 方式二：GitHub Issue 模板
+
+1. 打开 [新增 vCard 请求](https://github.com/dolfly/vCards/issues/new/choose) 页面，选择「vCard 新增请求」
 2. 完整填写相关信息
 3. 提交 Issue，等待处理
+
+> 两种方式最终都会创建同一个 GitHub Issue，进入相同的收录流程。
 
 ---
 

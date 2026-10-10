@@ -8,6 +8,14 @@ import prettyBytes from 'pretty-bytes'
 import isPng from './utils/isPng.js'
 import blockList from './const/block.js'
 import schema from './const/schema.js'
+import {
+  CUSTOM_CATEGORY,
+  buildIssueBody,
+  buildIssueTitle,
+  buildIssueUrl,
+  splitLines,
+  validateSubmission
+} from '../web/src/lib/submit.js'
 
 const checkImage = (t, filePath) => {
   const buffer = readChunkSync(filePath, {
@@ -105,3 +113,86 @@ for (const filePath of yamlPaths) {
   test(`Image/${type}/${name}`, checkImage, `data/${type}/${name}.png`)
   test(`vCard/${type}/${name}`, checkVCard, `data/${type}/${name}.yaml`)
 }
+
+/* ---------- 网页版「请求收录」纯逻辑 ---------- */
+
+const validForm = {
+  category: '金融银行',
+  organization: '示例银行',
+  phones: '95588\n400-000-0000',
+  url: 'https://example.com',
+  emails: 'service@example.com',
+  note: '客户服务热线'
+}
+
+test('Submit/splitLines-ignores-blank', t => {
+  t.deepEqual(splitLines(' 95588 \n\n  400-1 \r\n'), ['95588', '400-1'])
+  t.deepEqual(splitLines(undefined), [])
+})
+
+test('Submit/valid-form-passes', t => {
+  const result = validateSubmission(validForm)
+  t.true(result.ok)
+  t.deepEqual(result.errors, {})
+})
+
+test('Submit/requires-organization', t => {
+  const result = validateSubmission({ ...validForm, organization: '  ' })
+  t.false(result.ok)
+  t.truthy(result.errors.organization)
+})
+
+test('Submit/requires-phone-or-email', t => {
+  const result = validateSubmission({ ...validForm, phones: '', emails: '' })
+  t.false(result.ok)
+  t.truthy(result.errors.phones)
+})
+
+test('Submit/rejects-bad-phone', t => {
+  const result = validateSubmission({ ...validForm, phones: 'abc' })
+  t.false(result.ok)
+  t.truthy(result.errors.phones)
+})
+
+test('Submit/rejects-bad-url-and-email', t => {
+  const result = validateSubmission({ ...validForm, url: 'example.com', emails: 'not-an-email' })
+  t.false(result.ok)
+  t.truthy(result.errors.url)
+  t.truthy(result.errors.emails)
+})
+
+test('Submit/custom-category-resolves', t => {
+  const ok = validateSubmission({ ...validForm, category: CUSTOM_CATEGORY, customCategory: '新兴行业' })
+  t.true(ok.ok)
+  const missing = validateSubmission({ ...validForm, category: CUSTOM_CATEGORY, customCategory: '' })
+  t.false(missing.ok)
+  t.truthy(missing.errors.category)
+})
+
+test('Submit/issue-title-uses-organization', t => {
+  t.is(buildIssueTitle(validForm), '[vCard 新增请求] 示例银行')
+  t.is(buildIssueTitle({ organization: '' }), '[vCard 新增请求] 未命名')
+})
+
+test('Submit/issue-body-contains-all-fields', t => {
+  const body = buildIssueBody(validForm)
+  t.true(body.includes('**类别**：金融银行'))
+  t.true(body.includes('**组织名称**：示例银行'))
+  t.true(body.includes('  - 95588'))
+  t.true(body.includes('  - 400-000-0000'))
+  t.true(body.includes('**官方网址**：https://example.com'))
+  t.true(body.includes('  - service@example.com'))
+  t.true(body.includes('**备注**：客户服务热线'))
+})
+
+test('Submit/issue-url-is-encoded', t => {
+  const url = buildIssueUrl(validForm)
+  t.true(url.startsWith('https://github.com/dolfly/vCards/issues/new?'))
+  t.true(url.includes('title='))
+  t.true(url.includes('body='))
+  // 标题中的中文与空格已编码，且断言可被 URL 解析器还原
+  const query = url.slice(url.indexOf('?') + 1)
+  const params = new URLSearchParams(query)
+  t.is(params.get('title'), '[vCard 新增请求] 示例银行')
+  t.true(params.get('body').includes('示例银行'))
+})

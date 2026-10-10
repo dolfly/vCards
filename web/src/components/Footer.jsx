@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { data } from '../lib/data'
 
 export default function Footer() {
@@ -25,8 +26,11 @@ export default function Footer() {
               </a>
             </li>
             <li>
+              <Link to="/submit">请求收录</Link>
+            </li>
+            <li>
               <a href="https://github.com/dolfly/vCards/issues/new/choose" target="_blank" rel="noopener noreferrer">
-                请求收录
+                GitHub 模板提交
               </a>
             </li>
           </ul>

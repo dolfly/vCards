@@ -68,7 +68,10 @@ export default function Home() {
           <p className="tile__lead tile__lead--on-dark">
             从金融银行、证券保险到快递物流、外卖订餐，收录常用企业与公共服务号码。
           </p>
-          <Link to="/category" className="btn btn--pill">开始浏览</Link>
+          <div className="tile__cta">
+            <Link to="/category" className="btn btn--pill">开始浏览</Link>
+            <Link to="/submit" className="btn btn--ghost-pill btn--on-dark">请求收录</Link>
+          </div>
         </div>
       </section>
 
